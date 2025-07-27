@@ -12,18 +12,16 @@ const DATABASE_NAME = "arto-riska-nanda";
 let data_update;
 let data;
 
-async function init() {
-
+async function initDataJson() {
+  // Pengecekan elemen penting
   data = await getData('tamu');
   data_update = data.updated;
-  if (data && Array.isArray(data.tamu)) {
-    gantiIsiClass("nama", namaTamu);
-    buatKomentarDariData();
-    document.body.classList.remove("imp-hidden");
-    tampilkanRSVP();
-    initGiftFormHandler();
-    initCommentFormHandler();
-  }
+  gantiIsiClass("nama", namaTamu);
+  buatKomentarDariData();
+  document.body.classList.remove("imp-hidden");
+  tampilkanRSVP();
+  initCommentFormHandler();
+
 }
 
 async function getData(namaFile) {
@@ -48,7 +46,7 @@ async function updateData() {
 
     // Pengulangan ambil data terus-menerus
     const polling = async () => {
-      const dataBaru = await getData('preview-tamu');
+      const dataBaru = await getData('tamu');
 
       if (dataBaru.updated && dataBaru.updated != data_update) {
         showAlert("Perubahan data terdeteksi. Memuat ulang halaman...", "info");
@@ -275,33 +273,6 @@ function initGiftFormHandler() {
   form.addEventListener("submit", handleFormGift);
 }
 
-async function handleFormGift(event) {
-  event.preventDefault();
-  const form = document.getElementById("weddingGiftForm");
-  const akun = encodeCustom(form.querySelector('[name="account_name"]').value);
-  const pesan = encodeCustom(form.querySelector('[name="message"]').value);
-  const nominal = encodeCustom(form.querySelector('[name="amount"]').value);
-  if (!akun || !pesan || !nominal) return alert("Silakan lengkapi data kado");
-
-  try {
-    const url = buildUrlGift(akun,pesan,nominal);
-    const response = await fetch(url);
-    const result = await response.json();
-  if (result.status){
-    showAlert("Konfirmasi kado berhasil dikirim!", "success");
-    updateData(); 
-  }else{
-    showAlert(result.error, "error");
-  }
-  } catch (err) {
-    console.error("Gagal mengirim konfirmasi kado:", err);
-    showAlert("Gagal mengirim data. Silakan coba lagi.", "error");
-  }
-}
-function buildUrlGift(akun,pesan,nominal) {
-  const query = `UPDATE kado SET akun=${encodeURIComponent(akun)},pesan=${encodeURIComponent(pesan)},nominal=${encodeURIComponent(nominal)} WHERE nama=${encodeCustom(namaTamu)}`;
-  return `${SCRIPT_BASE_URL}?conn=DATABASE=${DATABASE_NAME}&data=${query}`;
-}
 // komentar -----------------------------------
 function initCommentFormHandler() {
   const form = document.getElementById("weddingWishForm");
@@ -496,4 +467,4 @@ function encodeCustom(text) {
 }
 
 
-init();
+initDataJson();
