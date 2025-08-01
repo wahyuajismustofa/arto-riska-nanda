@@ -1,5 +1,5 @@
 {
-  "updated": "1/8/2025, 20.53.22",
+  "updated": "1/8/2025, 21.29.08",
   "tamu": [
     {
       "nama": "Arto Printing",
@@ -49,6 +49,13 @@
       "pesan": "Selamat bocilku??",
       "kehadiran": "Hadir",
       "acara": "Akad Nikah"
+    },
+    {
+      "nama": "tri yuni",
+      "waktu-pesan": "",
+      "pesan": "",
+      "kehadiran": "Tidak Hadir",
+      "acara": "Tidak memilih acara"
     }
   ]
 }
